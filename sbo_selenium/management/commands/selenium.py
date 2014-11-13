@@ -5,10 +5,10 @@ from subprocess import Popen, PIPE
 
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
+from django.conf import settings
 
-from django_nose.management.commands.test import Command as TestCommand
+from django.core.management.commands.test import Command as TestCommand
 
-from sbo_selenium.conf import settings
 from sbo_selenium.testcase import sauce_sessions
 from sbo_selenium.utils import OutputMonitor
 
