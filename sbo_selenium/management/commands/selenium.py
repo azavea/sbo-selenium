@@ -25,7 +25,7 @@ class Command(BaseCommand):
             '-b',
             '--browser',
             dest='browser_name',
-            default='chrome',
+            default=settings.SELENIUM_DEFAULT_BROWSER,
             help='Name of the browser to run the tests in (default is chrome)'
         ),
         make_option(
