@@ -11,7 +11,7 @@ import time
 
 from nose.tools import assert_raises
 from django.test import LiveServerTestCase
-from django.test.testcases import QuietWSGIRequestHandler, StoppableWSGIServer
+from django.test.testcases import QuietWSGIRequestHandler
 from django.utils import six
 import requests
 from selenium import webdriver
@@ -24,6 +24,12 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from sbo_selenium.conf import settings
+
+# StoppableWSGIServer is not in Django 1.7
+try:
+    from django.test.testcases import StoppableWSGIServer
+except ImportError:
+    StoppableWSGIServer = None
 
 logger = logging.getLogger('django.request')
 
@@ -142,7 +148,8 @@ def replacement_handle_error(self, request, client_address):
 
 QuietWSGIRequestHandler.get_stderr = replacement_get_stderr
 QuietWSGIRequestHandler.log_message = replacement_log_message
-StoppableWSGIServer.handle_error = replacement_handle_error
+if StoppableWSGIServer is not None:
+    StoppableWSGIServer.handle_error = replacement_handle_error
 
 
 def lambda_click(element):
