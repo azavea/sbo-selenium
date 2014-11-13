@@ -6,7 +6,7 @@ from subprocess import Popen, PIPE
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
-from django_nose.management.commands.test import Command as TestCommand
+from django.core.management.commands.test import Command as TestCommand
 
 from sbo_selenium.conf import settings
 from sbo_selenium.testcase import sauce_sessions
@@ -25,7 +25,7 @@ class Command(BaseCommand):
             '-b',
             '--browser',
             dest='browser_name',
-            default='chrome',
+            default=settings.SELENIUM_DEFAULT_BROWSER,
             help='Name of the browser to run the tests in (default is chrome)'
         ),
         make_option(
@@ -114,10 +114,11 @@ class Command(BaseCommand):
     def run_tests(self, tests, browser_name, count):
         """Configure and run the tests"""
         test_args = ['test'] + tests
+        test_options = settings.SELENIUM_TEST_COMMAND_OPTIONS
         for i in range(count):
             msg = 'Test run %d using %s' % (i + 1, browser_name)
             self.stdout.write(msg)
-            call_command(*test_args)
+            call_command(*test_args, **test_options)
             for session in sauce_sessions:
                 self.stdout.write(session)
             self.stdout.flush()
