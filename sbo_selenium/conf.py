@@ -10,6 +10,11 @@ class LazySettings(object):
                        'localhost:9001')
 
     @property
+    def SELENIUM_TEST_COMMAND_OPTIONS(self):
+        """Extra options to provide to the test runner"""
+        return getattr(django_settings, 'SELENIUM_TEST_COMMAND_OPTIONS', {})
+
+    @property
     def SELENIUM_DEFAULT_BROWSER(self):
         """Default browser to use when running tests"""
         return getattr(django_settings, 'SELENIUM_DEFAULT_BROWSER', ['chrome'])
