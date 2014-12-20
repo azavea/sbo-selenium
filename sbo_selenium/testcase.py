@@ -280,7 +280,9 @@ class SeleniumTestCase(LiveServerTestCase):
             self.sel = RemoteWebDriver(desired_capabilities=DesiredCapabilities.SAFARI)
         else:
             self.sel = Chrome()
-        self.sel.set_page_load_timeout(settings.SELENIUM_PAGE_LOAD_TIMEOUT)
+        # set_page_load_timeout does not seem to work in every browser
+        # Waiting for the body to appear seems like a safe alternative
+        self.wait_for_element('body')
         # Give the browser a little time; Firefox throws random errors if you
         # hit it too soon
         time.sleep(1)
