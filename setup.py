@@ -3,13 +3,16 @@
 import os
 from pip.index import PackageFinder
 from pip.req import parse_requirements
+from pip.download import PipSession
 from setuptools import setup, find_packages
+
+session = PipSession()
 
 root_dir = os.path.abspath(os.path.dirname(__file__))
 requirements_path = os.path.join(root_dir, 'requirements', 'base.txt')
 
-finder = PackageFinder([], [])
-requirements = parse_requirements(requirements_path, finder)
+finder = PackageFinder([], [], session=session)
+requirements = parse_requirements(requirements_path, finder, session=session)
 install_requires = [str(r.req) for r in requirements]
 
 
